@@ -1,27 +1,19 @@
 'use strict'
-
 require('array.prototype.flatmap').shim();
-var check=async(findid)=>{
-    // console.log(findid);
-    const {body} =await client.search({
-        index:'orders',
-        body: {
-          query : {
-            match:{
-                _id:findid
-            }
-        }
-        }
-      })
-    //   console.log(body.hits);
-    return body.hits.hits
-}
+  
 const insert =async(added)=>{
-    if(check(added[0].id).length!=0){
-        console.log("XX");
-        const body = added.flatMap(doc => [{ index: { _index: 'orders' , _id:doc.id} }, doc])
+        // console.log("XX");
+        var add =[];
+        added.forEach(function(o){
+            var e = {};
+            Object.keys(o).forEach(function(k){
+              var v = o[k];
+              e[k] = String(v);
+            });
+            add.push(e);
+          });
+        const body = add.flatMap(doc => [{ index: { _index: 'orders' , _id:parseInt(doc.id)} }, doc])
         const { body: bulkResponse } = await client.bulk({ refresh: true, body })
-    }
 }
 const deletefrom=async (deleteid)=>{
     await client.delete({
@@ -40,11 +32,16 @@ var updatein= async(updated)=>{
     var doc=Object.values(updated)[0];
     var idd=Object.keys(updated)[0];
     // console.log(u,idd);
+    var e = {};
+    Object.keys(o).forEach(function(k){
+      var v = o[k];
+      e[k] = String(v);
+    });
     await client.update({
       index: 'orders',
       id: idd,
       body: {
-        doc
+        e
       }
     })
   }

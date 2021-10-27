@@ -64,13 +64,14 @@ const searchinfo =async(req,res)=>{
                 query:{
                     bool: { 
                         should: [
-                        { match: { sellerID: sid}},
-                        { multi_match:{
-                                query:search,
-                                type:"phrase",
-                                fields:[ "customer", "importID","date"],
-                        }}
-                        ]
+                        { match_phrase: { sellerID: sid}}],
+                        filter: [
+                        {multi_match : {
+                            query: search,
+                            type:  "phrase",
+                            fields:     [ "impotedID", "customer","date"],
+                            }
+                        }]
                     }
                 }
             }
