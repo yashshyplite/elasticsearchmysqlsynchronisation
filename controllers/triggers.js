@@ -29,19 +29,20 @@ const deletefrom=async (deleteid)=>{
 // }
 var updatein= async(updated)=>{
     
-    var doc=Object.values(updated)[0];
+    var e=Object.values(updated)[0];
     var idd=Object.keys(updated)[0];
     // console.log(u,idd);
-    var e = {};
-    Object.keys(o).forEach(function(k){
-      var v = o[k];
-      e[k] = String(v);
+    var doc = {};
+    Object.keys(e).forEach(function(k){
+      var v = e[k];
+      doc[k] = String(v);
     });
+    // console.log(e);
     await client.update({
       index: 'orders',
       id: idd,
       body: {
-        e
+        doc
       }
     })
   }

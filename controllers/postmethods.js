@@ -34,7 +34,7 @@ const updateinfo =(req,res)=>{
     var ts = new Date();
     var currentOffset = ts.getTimezoneOffset();
     var ISTOffset = 330;   // IST offset UTC +5:30 
-    var ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
+    var ISTTime = new Date(ts.getTime() + (ISTOffset + currentOffset)*60000);
     post['modified']= ISTTime.toISOString().slice(0, 19).replace('T', ' ');
     liveDb.db.query(sql,post,err=>{
         if(err){
