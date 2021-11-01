@@ -1,25 +1,43 @@
 const popup = require('node-popup');
 
-const insertinfo =(req,res)=>{
-    var date= new Date(req.body.date);
-    let post = {
-        importedID:req.body.importedID,
-        sellerID:req.body.sellerID,
-        channel:req.body.channel,
-        customer:req.body.customer,
-        pincode:req.body.pincode,
-        type:req.body.type,
-        date:date.toISOString().slice(0, 19).replace('T', ' '),
-        totalValue:req.body.totalvalue,
-        status:req.body.status
-    }
-    let sql = "INSERT INTO orders SET ?;";
-    liveDb.db.query(sql,post,err=>{
-        if(err){
-            console.log(err);
+const searchsellerID =async(findID)=>{
+    const {body} =await client.search({
+        index:'sellers',
+        body:{
+            query:{
+                 match: { sellerID: findID}  
+            }
         }
-        res.redirect('/insert')
-    });
+    })
+    // console.log("search result-->",body.hits.hits.length);
+    return body.hits.hits.length
+}
+const insertinfo =async (req,res)=>{
+    if(await searchsellerID(req.body.sellerID)==0){
+        res.send("seller don't exist");
+    }else{
+        var date= new Date(req.body.date);
+        let post = {
+            importedID:req.body.importedID,
+            sellerID:req.body.sellerID,
+            channel:req.body.channel,
+            customer:req.body.customer,
+            pincode:req.body.pincode,
+            type:req.body.type,
+            date:date.toISOString().slice(0, 19).replace('T', ' '),
+            totalValue:req.body.totalvalue,
+            status:req.body.status
+        }
+
+        let sql = "INSERT INTO orders SET ?;";
+        liveDb.db.query(sql,post,err=>{
+            if(err){
+                console.log(err);
+            }
+            res.redirect('/insert')
+        });
+
+    }
 };
 const updateinfo =(req,res)=>{
     let sql = `UPDATE orders SET ? WHERE sellerID=${req.body.sellerID} And importedID=${req.body.importedID};`;
@@ -63,13 +81,13 @@ const searchinfo =async(req,res)=>{
             body:{
                 query:{
                     bool: { 
-                        should: [
+                        must: [
                         { match_phrase: { sellerID: sid}}],
                         filter: [
                         {multi_match : {
                             query: search,
                             type:  "phrase",
-                            fields:     [ "impotedID", "customer","date"],
+                            fields:[ "importedID", "customer","date"],
                             }
                         }]
                     }
@@ -83,7 +101,7 @@ const searchinfo =async(req,res)=>{
             index:'orders',
             body:{
                 query:{
-                     match: { sellerID: sid}  
+                    match: { sellerID: sid}  
                 }
             }
         })

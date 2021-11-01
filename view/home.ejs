@@ -3,10 +3,26 @@
 <body>
     <div class="container">
         <br>
-        <button onclick="window.location.href='/insert'" type="button" class="btn btn-primary btn-lg">Insert</button><br><br>
-        <button onclick="window.location.href='/update'"type="button" class="btn btn-secondary btn-lg">Update</button><br><br>
-        <button onclick="window.location.href='/delete'"type="button" class="btn btn-danger btn-lg">Delete</button><br><br>
-        <button onclick="window.location.href='/search'"type="button" class="btn btn-info btn-lg">Search</button>
+        <div class="row">
+            <div class="col">
+                <h2>Seller options</h2><br><br>
+                <button onclick="window.location.href='/insertseller'" type="button" class="btn btn-primary btn-lg">Insert Seller</button><br><br>
+                <button onclick="window.location.href='/updateseller'"type="button" class="btn btn-secondary btn-lg">Update Seller</button><br><br>
+                <button onclick="window.location.href='/sellersearch'"type="button" class="btn btn-info btn-lg">Search Seller</button><br><br>
+            </div>
+            <div class="col">
+                <h2>Orders options</h2><br><br>
+                <button onclick="window.location.href='/insert'" type="button" class="btn btn-primary btn-lg">Insert Order</button><br><br>
+                <button onclick="window.location.href='/update'"type="button" class="btn btn-secondary btn-lg">Update Order</button><br><br>
+                <button onclick="window.location.href='/delete'"type="button" class="btn btn-danger btn-lg">Delete Order</button><br><br>
+                <button onclick="window.location.href='/search'"type="button" class="btn btn-info btn-lg">Search Order</button><br><br>
+            </div>
+            <div class="col">
+                <h2>Tracking options</h2><br><br>
+                <button onclick="window.location.href='/updatetracking'"type="button" class="btn btn-secondary btn-lg">Update Tracking</button><br><br>
+                <button onclick="window.location.href='/trackingsearch'"type="button" class="btn btn-info btn-lg">Search Tracking</button><br><br>
+            </div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>

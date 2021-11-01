@@ -12,18 +12,12 @@ const insert =async(added)=>{
             });
             add.push(e);
           });
-        const body = add.flatMap(doc => [{ index: { _index: 'orders' , _id:parseInt(doc.id)} }, doc])
+        const body = add.flatMap(doc => [{ index: { _index: 'tracking' , _id:parseInt(doc.orderID)} }, doc])
         const { body: bulkResponse } = await client.bulk({ refresh: true, body })
-}
-const deletefrom=async (deleteid)=>{
-    await client.delete({
-        index: "orders",
-        id: deleteid
-    });
 }
 // const del=async ()=>{
 //     await client.delete({
-//         index: "orders",
+//         index: "tracking",
 //         id: "17950757"
 //     });
 // }
@@ -39,7 +33,7 @@ var updatein= async(updated)=>{
     });
     // console.log(e);
     await client.update({
-      index: 'orders',
+      index: 'tracking',
       id: idd,
       body: {
         doc
@@ -47,17 +41,13 @@ var updatein= async(updated)=>{
     })
   }
 
-const triggers = function(diff, data){
-    console.log("data ------------------>\n",diff);
+const trackingtriggers = function(diff, data){
+    // console.log("data ------------------>\n",diff);
     var added=Object.values(diff.added);
     if(added.length)insert(added);
-    if(diff.removed!=null){
-        var deleted=Object.keys(diff.removed);
-        if(deleted.length)deletefrom(deleted[0]);
-    }
     if(diff.changed!=null){
         var updated=diff.changed;
         if(Object.keys(updated).length)updatein(updated);
     }
 };
-module.exports = {triggers};
+module.exports = {trackingtriggers};
